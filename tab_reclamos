@@ -1,0 +1,21 @@
+CREATE OR REPLACE TABLE `rapihogar-data-analysis.performance_operativa.tab_visitas` AS
+WITH Unnested_Visitas AS (
+SELECT
+t.order_id,
+DATE(t.created_time) AS order_created_time,
+t.rubro_name AS order_rubro_name,
+t.province AS order_province,
+t.city AS order_city,
+t.name_organization AS order_name_organization,
+visit.id AS visita_id,
+visit.technician_data.technician_fullname AS visita_technician_fullname,
+DATE(visit.datetime) AS visita_datetime,
+visit.type AS visita_type,
+visit.status AS visita_status,
+visit.confirm_client AS visita_confirm_client
+FROM
+`rapihogar-data-analysis.dw.order` t,
+UNNEST(visita) AS visit)
+SELECT *
+FROM Unnested_Visitas
+WHERE EXTRACT(YEAR FROM order_created_time) = 2024;
