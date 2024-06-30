@@ -1,0 +1,26 @@
+CREATE OR REPLACE TABLE `rapihogar-data-analysis.performance_operativa.tab_pedidos` AS
+SELECT
+order_id,
+DATE(created_time) AS created_time_date,
+DATE(ended_time) AS ended_time_date,
+DATE(cancelation_time) AS cancelation_time_date,
+EXTRACT(HOUR FROM created_time) AS created_time_hour,
+schema,
+close_criteria,
+is_refund,
+province,
+city,
+rubro_name,
+service_name,
+order_status,
+name_organization,
+technician_current_data.nombre_completo AS nombre_prestador,
+CASE
+WHEN rubro_name IN ('Service Lavarropas', 'Service Heladeras', 'Service audio y video', 'Pintores', 'Desinfección', 'Dispositos de Seguridad', 'Fletes') THEN TRUE
+ELSE FALSE
+END AS default_refund
+FROM
+`rapihogar-data-analysis.dw.order`
+WHERE
+EXTRACT(YEAR FROM created_time) = 2024
+AND schema IN ('Reintegro', 'Asistencias')
