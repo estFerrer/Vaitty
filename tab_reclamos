@@ -1,0 +1,8 @@
+CREATE OR REPLACE TABLE `rapihogar-data-analysis.performance_operativa.tab_reclamos` AS
+SELECT
+order_id,
+DATE(created_time) AS created_time_date,
+issue_type_id,
+status AS issue_status_id,
+description
+FROM `rapihogar-data-analysis.data_row.issues` WHERE EXTRACT(YEAR FROM created_time) = 2024;
